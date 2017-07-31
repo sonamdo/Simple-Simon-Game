@@ -1,0 +1,318 @@
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+</head>
+
+<h2>Simple Simon Game: Repeat The Pattern
+<br>Click Pac Man To Start
+</h2>
+<div id = "stats">
+<p id = "strictMode">Easy Mode</p>
+<p id = "score">Score:0</p>
+</div>
+<div>
+  <button id = "strict">
+    Strict
+  </button>
+</div>
+
+<div>
+  <button id = "start">
+     <div id = "mouth"></div>
+  </button>
+</div>
+
+<div> 
+<button id = "reset">Reset</button>
+</div>
+
+<button class = "inputters" id = "btn1">   
+  <div class = "leftEye">
+    <div class = "pupil"></div></div>
+  <div class = "rightEye">
+    <div class = "pupil"></div></div>
+</button> 
+
+<button class = "inputters" id = "btn2">   
+  <div class = "leftEye">
+    <div class = "pupil"></div></div>
+  <div class = "rightEye">
+    <div class = "pupil"></div></div>
+</button>
+
+<button class = "inputters" id = "btn3">   
+  <div class = "leftEye">
+    <div class = "pupil"></div></div>
+  <div class = "rightEye">
+    <div class = "pupil"></div></div>
+</button>
+
+<button class = "inputters" id = "btn4">   
+  <div class = "leftEye">
+    <div class = "pupil"></div></div>
+  <div class = "rightEye">
+    <div class = "pupil"></div></div>
+</button>
+
+<style>
+h2{
+  color: blue;
+  text-align: center;
+  font-family: courier;
+  font-weight: bold;
+}
+
+#btn1{
+  position : absolute;
+  top : 100px;
+  left : 46%;
+  width: 88px;
+  height: 100px;
+  border-radius : 40% 40% 0 0;
+  background-color: rgb(255,12,19);
+  border-color: black;
+}
+
+#btn2{
+  position : absolute;
+  top : 100px;
+  left: 54%;
+    width: 88px;
+  height: 100px;
+  border-radius : 40% 40% 0 0;
+  background-color: rgb(242,174,175);
+  border-color: black;
+}
+
+#btn3{
+  position : absolute;
+  top : 250px;
+  left : 46%;
+  
+  width: 88px;
+  height: 100px;
+  border-radius : 40% 40% 0 0;
+  background-color: rgb(249,126,22);
+  border-color: black;
+}
+#btn4{
+  position : absolute;
+  top : 250px;
+  left: 54%;
+ 
+  width: 88px;
+  height: 100px;
+  border-radius : 40% 40% 0 0;
+  background-color: rgb(27,177,230);
+  border-color: black;
+}
+.inputters:after{
+    background: linear-gradient(-45deg, black 16px, transparent 0), linear-gradient(45deg, black 16px, transparent 0);
+    background-position: left-bottom;
+    background-repeat: repeat-x;
+    background-size: 21px 37px;
+    content: " ";
+    display: block;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 100%;
+    height: 25px;
+}
+
+body{
+  background-color : black;
+}
+.leftEye{
+  width: 22px;
+  height: 22px;
+  background-color : white;
+  border-radius : 40%;
+  position: absolute;
+  top: 25%;
+  left: 35%;
+}
+.rightEye{
+  width: 22px;
+  height: 22px;
+  background-color : white;
+  border-radius : 40%;
+  position: absolute;
+  top: 25%;
+  left: 72%;
+}
+.pupil{
+  height : 12px;
+  width : 12px;
+  border-radius : 50%;
+  background-color : black;
+  position : absolute;
+  top: 30%;
+  right: 0%;
+}
+
+#start{
+  height:105px;
+  width:105px;
+  border-radius:50%;
+  background-color:yellow;
+  border-color:black;
+  position: absolute;
+  left:32%;
+  top:146px;
+}
+#mouth{
+  height: 60px;
+  width:60px;
+  background-color: black;
+  position:relative;
+  transform: rotate(45deg);
+  left:53px;
+}
+
+#score{
+  color: blue;
+  font-family: courier;
+  font-weight: bold;
+  font-size: 20px;
+  position: absolute;
+  left:50%;
+  top: 225px;
+}
+
+#strictMode{
+  color: blue;
+  font-family: courier;
+  font-weight: bold;
+  font-size: 20px;
+  position: relative;
+  left:50%;
+  top: 125px;
+}
+
+#reset{
+  left: 50%;
+  position: absolute;
+  top:400px;
+}
+
+#strict{
+  left: 50%;
+  position: absolute;
+  top:430px;
+}
+</style>
+
+<script>
+$(document).ready(function(){
+var answer = [];//output this for player to copy  
+var pattern = [];//player input, starts at nothing
+var i = 0;//shows answer, runs loop
+var e = 0;//for showAnswer function
+var strict = 0;
+var audio1 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound1.mp3");
+var audio2 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound2.mp3");
+var audio3 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound3.mp3");
+var audio4 = new Audio("https://s3.amazonaws.com/freecodecamp/simonSound4.mp3");
+  
+function winCondition(){if (answer.length === 20){
+  alert("You Win! Good Job! Keep going or reset to start again.") 
+}}; 
+function checkIt(){//shows the pattern you need to mimic
+  setTimeout(function(){
+    $("#btn"+answer[i]).effect( "bounce","slow" );
+    eval("audio"+answer[i]).play();
+    i++;
+    if (i < answer.length){
+     checkIt();
+    } else{
+      i = 0;
+      return
+    }
+  },700);
+}
+
+function showAnswer(){
+  setTimeout(function(){
+    
+  },2000)
+}
+  
+//creates answer, output for player
+answer.push(Math.floor(Math.random()*4)+1);
+console.log(answer);
+  
+ $(".inputters").on("click", function(){
+     switch(this.id){
+       case "btn1":$(this).effect("bounce","slow"); audio1.play(); pattern.push(1);checkAnswer(); break;
+       case "btn2":$(this).effect("shake","slow"); audio2.play(); pattern.push(2);checkAnswer(); break;
+       case "btn3":$(this).effect("shake","slow"); audio3.play(); pattern.push(3);checkAnswer(); break;
+       case "btn4":$(this).effect("bounce","slow"); audio4.play(); pattern.push(4);checkAnswer(); break;
+                   }
+   console.log(pattern);
+  });
+
+function openMouth(){
+    document.getElementById("mouth").style.visibility = "visible";
+}
+function closeMouth(){
+    document.getElementById("mouth").style.visibility = "hidden";
+}
+$("#strict").on("click",function(){
+  if (strict === 0){
+    strict++;
+    $("#strictMode").html("Easy Mode")
+  }
+  else strict--;
+    $("#strictMode").html("Hard Mode")
+});
+$("#start").on("click",function(){
+  document.getElementById("mouth").style.visibility = "hidden";
+  setTimeout(openMouth,200);
+  setTimeout(closeMouth,450);
+  setTimeout(openMouth,700);
+  checkIt();//calls a function, which splits answer into a array, then splices it and calls the relevant button
+});
+
+$("#reset").on("click",function(){
+  answer = [];
+  answer.push(Math.floor(Math.random()*4)+1);
+  $("#score").html("Score:"+(answer.length-1));
+  checkIt();
+});
+function win(){
+  setTimeout(checkIt,200)
+}
+  
+function checkAnswer(){//checks output/answer against input/pattern
+  for(var i = 0; i < pattern.length; i++){
+    if (pattern[i]===answer[i]){
+      console.log("match!");
+    }
+    else if (strict === 0){
+      alert("Wrong! Try Again!");
+      pattern = [];
+      return
+         }
+    else{
+      alert("Wrong! Start Over!")
+      pattern = [];
+      answer = [];
+      answer.push(Math.floor(Math.random()*4)+1);
+      setTimeout(checkIt,1000)
+      $("#score").html("Score:"+(answer.length-1));
+    }
+  }
+ 
+ if (pattern.length === answer.length){
+  winCondition();
+   setTimeout(win,200);//right answer, run next turn function
+  answer.push(Math.floor(Math.random()*4)+1);
+  pattern = [];
+  console.log(answer);
+  $("#score").html("Score:"+(answer.length-1));
+  }
+}
+
+});
+</script>
